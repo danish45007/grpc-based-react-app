@@ -8,7 +8,7 @@
     "build:proto-client": "scripts\\proto-client-gen.sh",
     "dev": "nodemon --exec ts-node server.ts",
     "start": "ts-node server.ts",
-    "client": "ts-node client.ts"
+    "client": "cd client && npm run start"
   },
   "keywords": [],
   "author": "",

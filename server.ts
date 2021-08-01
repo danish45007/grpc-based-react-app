@@ -5,7 +5,7 @@ import { ProtoGrpcType } from './proto/chat-service';
 import { ChatServiceHandlers } from './proto/chatServicePackage/ChatService';
 
 const PORT = process.env.PORT || 8000;
-const PROTO_FILE = 'proto/random.proto';
+const PROTO_FILE = 'proto/chat-service.proto';
 
 const pkgDef = protoLoader.loadSync(path.resolve(__dirname, PROTO_FILE));
 const grpcObj = grpc.loadPackageDefinition(pkgDef) as unknown as ProtoGrpcType;
