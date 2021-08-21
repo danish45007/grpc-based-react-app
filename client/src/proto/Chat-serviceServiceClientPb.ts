@@ -6,26 +6,25 @@
 
 // GENERATED CODE -- DO NOT EDIT!
 
-
 /* eslint-disable */
 // @ts-nocheck
-
 
 import * as grpcWeb from 'grpc-web';
 
 import * as google_protobuf_empty_pb from 'google-protobuf/google/protobuf/empty_pb';
 import * as proto_chat$service_pb from '../proto/chat-service_pb';
 
-
 export class ChatServiceClient {
   client_: grpcWeb.AbstractClientBase;
   hostname_: string;
-  credentials_: null | { [index: string]: string; };
-  options_: null | { [index: string]: any; };
+  credentials_: null | { [index: string]: string };
+  options_: null | { [index: string]: any };
 
-  constructor (hostname: string,
-               credentials?: null | { [index: string]: string; },
-               options?: null | { [index: string]: any; }) {
+  constructor(
+    hostname: string,
+    credentials?: null | { [index: string]: string },
+    options?: null | { [index: string]: any }
+  ) {
     if (!options) options = {};
     if (!credentials) credentials = {};
     options['format'] = 'text';
@@ -46,34 +45,41 @@ export class ChatServiceClient {
 
   chatInitateRequest(
     request: proto_chat$service_pb.InitateRequest,
-    metadata: grpcWeb.Metadata | null): Promise<proto_chat$service_pb.InitateResponse>;
+    metadata: grpcWeb.Metadata | null
+  ): Promise<proto_chat$service_pb.InitateResponse>;
 
   chatInitateRequest(
     request: proto_chat$service_pb.InitateRequest,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.Error,
-               response: proto_chat$service_pb.InitateResponse) => void): grpcWeb.ClientReadableStream<proto_chat$service_pb.InitateResponse>;
+    callback: (
+      err: grpcWeb.Error,
+      response: proto_chat$service_pb.InitateResponse
+    ) => void
+  ): grpcWeb.ClientReadableStream<proto_chat$service_pb.InitateResponse>;
 
   chatInitateRequest(
     request: proto_chat$service_pb.InitateRequest,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.Error,
-               response: proto_chat$service_pb.InitateResponse) => void) {
+    callback?: (
+      err: grpcWeb.Error,
+      response: proto_chat$service_pb.InitateResponse
+    ) => void
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
-        this.hostname_ +
-          '/chatServicePackage.ChatService/ChatInitateRequest',
+        this.hostname_ + '/chatServicePackage.ChatService/ChatInitateRequest',
         request,
         metadata || {},
         this.methodInfoChatInitateRequest,
-        callback);
+        callback
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/chatServicePackage.ChatService/ChatInitateRequest',
-    request,
-    metadata || {},
-    this.methodInfoChatInitateRequest);
+      this.hostname_ + '/chatServicePackage.ChatService/ChatInitateRequest',
+      request,
+      metadata || {},
+      this.methodInfoChatInitateRequest
+    );
   }
 
   methodInfoSendMessage = new grpcWeb.AbstractClientBase.MethodInfo(
@@ -86,34 +92,41 @@ export class ChatServiceClient {
 
   sendMessage(
     request: proto_chat$service_pb.MessageRequest,
-    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+    metadata: grpcWeb.Metadata | null
+  ): Promise<google_protobuf_empty_pb.Empty>;
 
   sendMessage(
     request: proto_chat$service_pb.MessageRequest,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.Error,
-               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+    callback: (
+      err: grpcWeb.Error,
+      response: google_protobuf_empty_pb.Empty
+    ) => void
+  ): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
 
   sendMessage(
     request: proto_chat$service_pb.MessageRequest,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.Error,
-               response: google_protobuf_empty_pb.Empty) => void) {
+    callback?: (
+      err: grpcWeb.Error,
+      response: google_protobuf_empty_pb.Empty
+    ) => void
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
-        this.hostname_ +
-          '/chatServicePackage.ChatService/SendMessage',
+        this.hostname_ + '/chatServicePackage.ChatService/SendMessage',
         request,
         metadata || {},
         this.methodInfoSendMessage,
-        callback);
+        callback
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/chatServicePackage.ChatService/SendMessage',
-    request,
-    metadata || {},
-    this.methodInfoSendMessage);
+      this.hostname_ + '/chatServicePackage.ChatService/SendMessage',
+      request,
+      metadata || {},
+      this.methodInfoSendMessage
+    );
   }
 
   methodInfoUserStream = new grpcWeb.AbstractClientBase.MethodInfo(
@@ -126,13 +139,14 @@ export class ChatServiceClient {
 
   userStream(
     request: proto_chat$service_pb.StreamRequest,
-    metadata?: grpcWeb.Metadata) {
+    metadata?: grpcWeb.Metadata
+  ) {
     return this.client_.serverStreaming(
-      this.hostname_ +
-        '/chatServicePackage.ChatService/UserStream',
+      this.hostname_ + '/chatServicePackage.ChatService/UserStream',
       request,
       metadata || {},
-      this.methodInfoUserStream);
+      this.methodInfoUserStream
+    );
   }
 
   methodInfoChatStream = new grpcWeb.AbstractClientBase.MethodInfo(
@@ -145,14 +159,13 @@ export class ChatServiceClient {
 
   chatStream(
     request: proto_chat$service_pb.StreamRequest,
-    metadata?: grpcWeb.Metadata) {
+    metadata?: grpcWeb.Metadata
+  ) {
     return this.client_.serverStreaming(
-      this.hostname_ +
-        '/chatServicePackage.ChatService/ChatStream',
+      this.hostname_ + '/chatServicePackage.ChatService/ChatStream',
       request,
       metadata || {},
-      this.methodInfoChatStream);
+      this.methodInfoChatStream
+    );
   }
-
 }
-
