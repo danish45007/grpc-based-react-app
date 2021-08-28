@@ -1,5 +1,6 @@
 /** @format */
 import redis from 'redis';
+import NRP from 'node-redis-pubsub';
 import { User } from '../proto/chatServicePackage/User';
 const client = redis.createClient();
 
@@ -84,3 +85,8 @@ export const getAllRoomMessage = (fn: ErrCb<Array<Message>>) => {
         return fn(null, msgs);
     });
 };
+
+export const nrp = NRP({
+    emitter: redis.createClient(),
+    receiver: redis.createClient(),
+});

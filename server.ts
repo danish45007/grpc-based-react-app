@@ -18,6 +18,7 @@ import { Status } from './proto/chatServicePackage/Status';
 import { StreamRequest__Output } from './proto/chatServicePackage/StreamRequest';
 import { StreamMessage } from './proto/chatServicePackage/StreamMessage';
 import { UserStreamResponse } from './proto/chatServicePackage/UserStreamResponse';
+import { emitMainChatRoomUpdate, listenMainChatRoomUpdate, listenUserUpdate } from './pub_sub';
 
 const PORT = process.env.PORT || 8000;
 const PROTO_FILE = 'proto/chat-service.proto';
@@ -77,11 +78,16 @@ function getServer() {
             findUserById(id, (err, user) => {
                 if (err) return callback(err);
                 const msg = {
-                    userId: user.id,
+                    userId: user?.id,
                     message: message,
-                    avatar: user.avatarUrl,
+                    avatar: user?.avatarUrl,
                 } as Message;
-                addMessageToRoom(msg, (err) => callback(err));
+                addMessageToRoom(msg, (err) => {
+                    if (err) return callback(err);
+                    //emit the message into channel<MAIN_ROOM>
+                    emitMainChatRoomUpdate(msg);
+                    return callback(null);
+                });
             });
         },
         ChatStream: (call) => {
@@ -91,17 +97,21 @@ function getServer() {
                 if (err) return call.end();
                 getAllRoomMessage((err, msgs) => {
                     if (err) return call.end();
-                    for (const msg of msgs) {
-                        call.write(msg);
+                    if (msgs != null) {
+                        for (const msg of msgs) {
+                            call.write(msg);
+                        }
+                        messageStreamByUserId.set(user?.id as number, call);
                     }
-                    messageStreamByUserId.set(user.id, call);
                 });
                 call.on('cancelled', () => {
-                    user.status = Status.Offline;
-                    updateUser(user, (err) => {
-                        if (err) console.error(err);
-                        messageStreamByUserId.delete(user.id);
-                    });
+                    if (user != null) {
+                        user.status = Status.Offline;
+                        updateUser(user as User, (err) => {
+                            if (err) console.error(err);
+                            messageStreamByUserId.delete(user?.id as number);
+                        });
+                    }
                 });
             });
         },
@@ -112,14 +122,33 @@ function getServer() {
                 if (err) return call.end();
                 listUsers((err, users) => {
                     if (err) call.end();
-                    call.write({ user: users });
-                    userStreamByUserId.set(user.id, call);
+                    call.write({ user: users as User[] });
+                    userStreamByUserId.set(user?.id as number, call);
                 });
+                call.on('cancelled', () => userStreamByUserId.delete(user?.id as number));
             });
         },
     } as ChatServiceHandlers);
     return server;
 }
+
+//initialize the listening events
+const setupPubSub = () => {
+    listenMainChatRoomUpdate((data, channel) => {
+        console.log(`Message Broadcasted From ${channel} Channel`);
+        for (const [_, msgCall] of messageStreamByUserId) {
+            msgCall.write(data);
+        }
+    });
+    listenUserUpdate(() => {
+        listUsers((err, users) => {
+            if (err) return console.error(err);
+            for (const [_, usrCall] of userStreamByUserId) {
+                usrCall.write({ user: users as User[] });
+            }
+        });
+    });
+};
 
 function main() {
     const server = getServer();
@@ -131,6 +160,8 @@ function main() {
         console.log(`Server is running on PORT:${port}`);
         //start server
         server.start();
+        //start subsub instance
+        setupPubSub();
     });
 }
 
