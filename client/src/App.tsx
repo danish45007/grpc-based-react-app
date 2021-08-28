@@ -3,38 +3,15 @@ import logo from './logo.svg';
 import './App.css';
 import { InitateRequest } from './proto/chat-service_pb';
 import { ChatServiceClient } from './proto/Chat-serviceServiceClientPb';
+import Greeting from './components/Greeting';
 
 function App() {
-    useEffect(() => {
-        (async () => {
-            const client = new ChatServiceClient('http://localhost:8080');
-            const req = new InitateRequest();
-            req.setName('Danish');
-            req.setAvatarUrl('123');
-            client.chatInitateRequest(req, {}, (err, response) => {
-                if (err) {
-                    console.log(err);
-                } else if (response) {
-                    console.log(response.toObject());
-                }
-            });
-        })();
-    }, []);
+    const handleUserSubmit = () => {};
     return (
-        <div className='App'>
-            <header className='App-header'>
-                <img src={logo} className='App-logo' alt='logo' />
-                <p>
-                    Edit <code>src/App.tsx</code> and save to reload.
-                </p>
-                <a
-                    className='App-link'
-                    href='https://reactjs.org'
-                    target='_blank'
-                    rel='noopener noreferrer'>
-                    Learn React
-                </a>
-            </header>
+        <div className='app'>
+            <div className='app_container'>
+                <Greeting onUsernameEnter={handleUserSubmit} />
+            </div>
         </div>
     );
 }
