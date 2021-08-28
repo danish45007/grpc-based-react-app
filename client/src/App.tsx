@@ -12,7 +12,9 @@ function App() {
             req.setName('Danish');
             req.setAvatarUrl('123');
             client.chatInitateRequest(req, {}, (err, response) => {
-                if (!err) {
+                if (err) {
+                    console.log(err);
+                } else if (response) {
                     console.log(response.toObject());
                 }
             });
